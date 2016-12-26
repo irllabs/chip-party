@@ -1,5 +1,6 @@
 #include <Bounce.h>
 
+
 // the MIDI channel number to send messages
 const int channel = 1;
 
@@ -26,6 +27,9 @@ Bounce button4 = Bounce(19, 5);
 
 void setup() {
 
+  //pinMode(3, OUTPUT);
+  usbMIDI.setHandleNoteOff(OnNoteOff);
+  usbMIDI.setHandleNoteOn(OnNoteOn) ;
 
 // store previously sent values, to detect changes
 
@@ -44,12 +48,14 @@ void setup() {
   pinMode(17, INPUT_PULLUP);
   pinMode(18, INPUT_PULLUP);
   pinMode(19, INPUT_PULLUP);
+  
+
 
 
 
 }
-
-void loop() {
+//----------------------for SENDING MIDI-----------------------
+void buttonInput(){
   // Update all the buttons.  There should not be any long
   // delays in loop(), so this runs repetitively at a rate
   // faster than the buttons could be pressed and released.
@@ -95,8 +101,10 @@ void loop() {
   if (button4.risingEdge()) {
     usbMIDI.sendNoteOff(64, 0, channel);  // 64 = E4
   }
+}
 
 
+void faderInput() {
   // only check the analog inputs 50 times per second,
   // to prevent a flood of MIDI messages
   if (msec >= 20) {
@@ -119,9 +127,36 @@ void loop() {
       previousA7 = n7;
     }
   }
+}
+
+unsigned long t=0;
+
+
+//----------------------for RECEIVING MIDI-----------------------
+void OnNoteOn(byte channel, byte note, byte velocity)
+{
+  analogWrite(3, velocity*2);
+}
+
+void OnNoteOff(byte channel, byte note, byte velocity)
+{
+  analogWrite(3, 0);
+}
+
+void loop() {
+  int type, note, velocity, channel, d1, d2;
+
+  //---------for sending midi---------
+  //process buttons
+  buttonInput();
+
+  //process faders
+  faderInput();
+
+  //--------for receiving midi---------
+
+  
     // MIDI Controllers should discard incoming MIDI messages.
   // http://forum.pjrc.com/threads/24179-Teensy-3-Ableton-Analog-CC-causes-midi-crash
-  while (usbMIDI.read()) {
-    // ignore incoming messages
-  }
+  usbMIDI.read();
 }
