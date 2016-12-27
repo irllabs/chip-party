@@ -25,6 +25,13 @@ const int faderPin4 = A3;  //this is A3
 const int faderPin5 = A4;  //this is A2
 const int faderPin6 = A5;  //this is A3
 
+//these two pins are broken out as 3-pin headers; 
+//they are connected to two pens that can be
+//analog inputs, digital inputs/ouputs, pwm outputs, or I2C bus
+//these are presently NOT used/sampled in the code below!
+const int multi1 = A4;  //this is A2
+const int multi2 = A5;  //this is A3
+
 const int joyPin1 = A6;
 const int joyPin2 = A7;
 
