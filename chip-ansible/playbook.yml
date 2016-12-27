@@ -50,7 +50,7 @@
 
     - name: copypatches
       copy:
-      src: /files/pd-patches
+      src: files/pd-patches
       dest: /samba-share/pd-patches
       owner: root
 
