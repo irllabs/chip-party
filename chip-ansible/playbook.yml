@@ -1,0 +1,56 @@
+#!/usr/bin/env ansible-playbook
+---
+- hosts: chipchestra
+  gather_facts: yes
+  vars:
+    update_cache: no
+  sudo: yes
+  tasks:
+    - name: install ubuntu packages
+      apt: pkg={{ item }} state=present update_cache={{ update_cache }}
+      with_items: 
+        # networking
+        - samba
+        - samba-common-bin
+        - dnsutils
+        - avahi-daemon
+        - tightvncserver
+        - ntpdate
+        # PureDtata
+        - puredata
+        - pd-comport
+        - pd-zexy
+        - pd-cyclone
+        - pd-list-abs
+        - pd-osc
+
+
+    # Configure Samba
+    - name: create samba share directory if it doesn't exist
+      file: path=/samba-share owner=root state=directory mode=1777
+    
+    - name: copy samba config file
+      template: src=templates/smb.conf dest=/etc/samba/smb.conf
+
+    # Configure tightvnc
+    - name: copy tightvnc config file
+      template: src=templates/tightvncserver.service dest=/etc/systemd/system/tightvncserver.service
+      
+    # Configure PureData
+    - name: create pd-patches  directory if it doesn't exist
+      file: path=/samba-share/pd-patches owner=root state=directory mode=1777
+    
+  handlers:
+    - name: reboot
+      command: shutdown -r now "Ansible updates triggered"
+      #command: ls -lah ./ 
+      async: 0
+      poll: 0
+      ignore_errors: 
+
+    - name: copypatches
+      copy:
+      src: /files/pd-patches
+      dest: /samba-share/pd-patches
+      owner: root
+
