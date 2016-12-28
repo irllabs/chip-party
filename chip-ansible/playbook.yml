@@ -16,6 +16,7 @@
         - avahi-daemon
         - tightvncserver
         - ntpdate
+        - rsynch
         # PureDtata
         - puredata
         - pd-comport
@@ -24,13 +25,16 @@
         - pd-list-abs
         - pd-osc
 
+    # Configure SSH
+    - name: copy ssh config file
+      template: src=templates/sshd_config dest=/etc/ssh/sshd_config 
 
     # Configure Samba
     - name: create samba share directory if it doesn't exist
       file: path=/samba-share owner=root state=directory mode=1777
     
     - name: copy samba config file
-      template: src=templates/smb.conf dest=/etc/samba/smb.conf
+      template: src=templates/smb.conf dest=/etc/samba/smb.conf   
 
     # Configure tightvnc
     - name: copy tightvnc config file

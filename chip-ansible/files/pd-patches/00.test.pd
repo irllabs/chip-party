@@ -1,0 +1,34 @@
+#N canvas 646 273 754 735 10;
+#X obj 327 479 osc~ 440;
+#X obj 327 203 metro 50;
+#X obj 327 247 random 30;
+#X obj 327 298 + 50;
+#X floatatom 327 331 5 0 0 0 - - -, f 5;
+#X obj 328 168 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
+1;
+#X obj 327 431 line~;
+#X obj 327 517 *~ 0.2;
+#X obj 322 565 dac~;
+#X obj 327 362 mtof;
+#X msg 327 391 \$1 10;
+#X msg 419 134 \; pd dsp 1;
+#X obj 328 26 loadbang;
+#X msg 328 60 1;
+#X obj 420 67 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X msg 495 135 \; pd audio-IO 1;
+#X connect 0 0 7 0;
+#X connect 1 0 2 0;
+#X connect 2 0 3 0;
+#X connect 3 0 4 0;
+#X connect 4 0 9 0;
+#X connect 5 0 1 0;
+#X connect 6 0 0 0;
+#X connect 7 0 8 0;
+#X connect 7 0 8 1;
+#X connect 9 0 10 0;
+#X connect 10 0 6 0;
+#X connect 12 0 13 0;
+#X connect 12 0 14 0;
+#X connect 13 0 5 0;
+#X connect 14 0 11 0;

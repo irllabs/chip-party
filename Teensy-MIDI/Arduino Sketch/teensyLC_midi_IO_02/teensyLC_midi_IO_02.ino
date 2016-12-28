@@ -18,22 +18,24 @@ const int ledNote4 = 63;
 // the MIDI continuous controller for each analog input
 
 
-const int faderPin1 = A0;  //this is A0
-const int faderPin2 = A1;  //this is A1
-const int faderPin3 = A2;  //this is A2
-const int faderPin4 = A3;  //this is A3
-const int faderPin5 = A4;  //this is A2
-const int faderPin6 = A5;  //this is A3
+const int faderPin1 = A0;  
+const int faderPin2 = A1;
+const int faderPin3 = A2; 
+const int faderPin4 = A3; 
+const int faderPin5 = A4; 
+const int faderPin6 = A5;  
+
+
+const int joyPin1 = A6;
+const int joyPin2 = A7;
 
 //these two pins are broken out as 3-pin headers; 
 //they are connected to two pens that can be
 //analog inputs, digital inputs/ouputs, pwm outputs, or I2C bus
-//these are presently NOT used/sampled in the code below!
-const int multi1 = A4;  //this is A2
-const int multi2 = A5;  //this is A3
 
-const int joyPin1 = A6;
-const int joyPin2 = A7;
+const int multiPin1 = A8; 
+const int multiPin2 = A9;  
+
 
 const int faderCtl1 = 14;
 const int faderCtl2 = 15;
@@ -44,6 +46,8 @@ const int faderCtl6 = 19;
 const int joyCtl1 = 20;
 const int joyCtl2 = 21;
 
+const int multiCtl1 = 22;
+const int multiCtl2 = 23;
 
 int faderPrev1 = -1;
 int faderPrev2 = -1;
@@ -53,6 +57,9 @@ int faderPrev5 = -1;
 int faderPrev6 = -1;
 int joyPrev1 = -1;
 int joyPrev2 = -1;
+
+int multiPrev1 = -1;
+int multiPrev2 = -1;
 
 const int buttonPin1 = 5;
 const int buttonPin2 = 7;
@@ -185,6 +192,10 @@ void faderInput() {
     
     int j1 = analogRead(joyPin1) / 8;
     int j2 = analogRead(joyPin2) / 8;
+
+    
+    int m1 = analogRead(multiPin1) / 8;
+    int m2 = analogRead(multiPin2) / 8;
     
     // only transmit MIDI messages if analog input changed
     if (f1 != faderPrev1) {
@@ -225,6 +236,16 @@ void faderInput() {
     if (j2 != joyPrev2) {
       usbMIDI.sendControlChange(joyCtl2, j2, channel);
       joyPrev2 = j2;
+    }
+
+    if (m1 != multiPrev1) {
+      usbMIDI.sendControlChange(multiCtl1, m1, channel);
+      multiPrev1 = m1;
+    }
+
+    if (m2 != multiPrev2) {
+      usbMIDI.sendControlChange(multiCtl2, m2, channel);
+      multiPrev2 = m2;
     }
   }
 }
