@@ -4,20 +4,16 @@
 // the MIDI channel number to send messages
 const int channel = 1;
 
+//-------------PIN NUMBERS-----------------------
+// these are the Arduino numbered pins to which are things are connected:
 
-const int ledPin1 = 2;  //this is A0
-const int ledPin2 = 6;  //this is A1
-const int ledPin3 = 9;  //this is A2
-const int ledPin4 = 10;  //this is A3
+//LEDs (Analog Outputs/PWM or Digital Output)
+const int ledPin1 = 2;    //this is NOT a PWM pin
+const int ledPin2 = 6;    //a PWM pin
+const int ledPin3 = 9;    //a PWM pin 
+const int ledPin4 = 10;   //a PWM pin
 
-const int ledNote1 = 60;
-const int ledNote2 = 61;
-const int ledNote3 = 62;
-const int ledNote4 = 63;
-
-// the MIDI continuous controller for each analog input
-
-
+//faders and joysticks (Analog Inputs)
 const int faderPin1 = A0;  
 const int faderPin2 = A1;
 const int faderPin3 = A2; 
@@ -25,17 +21,31 @@ const int faderPin4 = A3;
 const int faderPin5 = A4; 
 const int faderPin6 = A5;  
 
-
 const int joyPin1 = A6;
 const int joyPin2 = A7;
 
 //these two pins are broken out as 3-pin headers; 
 //they are connected to two pens that can be
 //analog inputs, digital inputs/ouputs, pwm outputs, or I2C bus
-
 const int multiPin1 = A8; 
 const int multiPin2 = A9;  
 
+//Push Buttongs (Digital Inputs)
+const int buttonPin1 = 5;
+const int buttonPin2 = 7;
+const int buttonPin3 = 11;
+const int buttonPin4 = 12;
+
+const int joyButtonPin = 8;
+
+//-------------MIDI NUMBERS-----------------------
+
+
+//LEDs are triggered by Note messages; velocity is mapped to brightness 
+const int ledNote1 = 60;
+const int ledNote2 = 61;
+const int ledNote3 = 62;
+const int ledNote4 = 63;
 
 const int faderCtl1 = 14;
 const int faderCtl2 = 15;
@@ -43,12 +53,21 @@ const int faderCtl3 = 16;
 const int faderCtl4 = 17;
 const int faderCtl5 = 18;
 const int faderCtl6 = 19;
+
 const int joyCtl1 = 20;
 const int joyCtl2 = 21;
 
 const int multiCtl1 = 22;
 const int multiCtl2 = 23;
 
+//Buttons trigger Note messages; velocity is 127 or 0
+const int joyButtonNote = 60;
+const int buttonNote1 = 61;
+const int buttonNote2 = 62;
+const int buttonNote3 = 63;
+const int buttonNote4 = 64;
+
+//-------------Continuous Control: send Changes only--------------
 int faderPrev1 = -1;
 int faderPrev2 = -1;
 int faderPrev3 = -1;
@@ -60,22 +79,6 @@ int joyPrev2 = -1;
 
 int multiPrev1 = -1;
 int multiPrev2 = -1;
-
-const int buttonPin1 = 5;
-const int buttonPin2 = 7;
-const int buttonPin3 = 11;
-const int buttonPin4 = 12;
-
-const int joyButtonPin = 8;
-
-const int buttonNote1 = 61;
-const int buttonNote2 = 62;
-const int buttonNote3 = 63;
-const int buttonNote4 = 64;
-
-
-const int joyButtonNote = 60;
-
 
 
 elapsedMillis msec = 0;
@@ -90,6 +93,8 @@ Bounce button3 = Bounce(buttonPin3, 5);  // quality mechanical pushbuttons
 Bounce button4 = Bounce(buttonPin4, 5);
 Bounce joyButton = Bounce(joyButtonPin, 5);
 
+
+//----------------------SETUP-----------------------
 void setup() {
 
   //pinMode(3, OUTPUT);
