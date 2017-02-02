@@ -8,35 +8,36 @@ const int channel = 1;
 // these are the Arduino numbered pins to which are things are connected:
 
 //LEDs (Analog Outputs/PWM or Digital Output)
-const int ledPin1 = 2;    //this is NOT a PWM pin
+const int ledPin1 = 5;    //a PWM pin
 const int ledPin2 = 6;    //a PWM pin
-const int ledPin3 = 9;    //a PWM pin 
-const int ledPin4 = 10;   //a PWM pin
+const int ledPin3 = 20;    //a PWM pin 
+const int ledPin4 = 21;   //a PWM pin
 
 //faders and joysticks (Analog Inputs)
 const int faderPin1 = A0;  
-const int faderPin2 = A1;
-const int faderPin3 = A2; 
-const int faderPin4 = A3; 
-const int faderPin5 = A4; 
-const int faderPin6 = A5;  
+const int faderPin2 = A9;
+const int faderPin3 = A20; 
+const int faderPin4 = A10; 
+const int faderPin5 = A11; 
+const int faderPin6 = A12;  
 
-const int joyPin1 = A6;
-const int joyPin2 = A7;
+const int joyPinH1 = A16;
+const int joyPinV1 = A15;
+const int joyPinH2 = A18;
+const int joyPinV2 = A17;
 
-//these two pins are broken out as 3-pin headers; 
-//they are connected to two pens that can be
-//analog inputs, digital inputs/ouputs, pwm outputs, or I2C bus
-const int multiPin1 = A8; 
-const int multiPin2 = A9;  
+const int joyButtonPin1 = 24;
+const int joyButtonPin2 = 30;
 
-//Push Buttongs (Digital Inputs)
-const int buttonPin1 = 5;
-const int buttonPin2 = 7;
-const int buttonPin3 = 11;
-const int buttonPin4 = 12;
+//Push Buttons (Digital Inputs)
+const int buttonPin1 = 13;
+const int buttonPin2 = 14;
 
-const int joyButtonPin = 8;
+
+//const int motor
+
+
+
 
 //-------------MIDI NUMBERS-----------------------
 
@@ -61,11 +62,13 @@ const int multiCtl1 = 22;
 const int multiCtl2 = 23;
 
 //Buttons trigger Note messages; velocity is 127 or 0
-const int joyButtonNote = 60;
+
 const int buttonNote1 = 61;
 const int buttonNote2 = 62;
 const int buttonNote3 = 63;
 const int buttonNote4 = 64;
+const int joyButtonNote1 = 65;
+const int joyButtonNote2 = 66;
 
 //-------------Continuous Control: send Changes only--------------
 int faderPrev1 = -1;
@@ -91,8 +94,8 @@ Bounce button1 = Bounce(buttonPin1, 5);  // 5 = 5 ms debounce time
 Bounce button2 = Bounce(buttonPin2, 5);  // which is appropriate for good
 Bounce button3 = Bounce(buttonPin3, 5);  // quality mechanical pushbuttons
 Bounce button4 = Bounce(buttonPin4, 5);
-Bounce joyButton = Bounce(joyButtonPin, 5);
-
+Bounce joyButton1 = Bounce(joyButtonPin1, 5);
+Bounce joyButton2 = Bounce(joyButtonPin2, 5);
 
 //----------------------SETUP-----------------------
 void setup() {
@@ -118,7 +121,8 @@ void setup() {
   pinMode(buttonPin2, INPUT_PULLUP);
   pinMode(buttonPin3, INPUT_PULLUP);
   pinMode(buttonPin4, INPUT_PULLUP);
-  pinMode(joyButtonPin, INPUT_PULLUP);
+  pinMode(joyButtonPin1, INPUT_PULLUP);
+  pinMode(joyButtonPin2, INPUT_PULLUP);
   
 
 
@@ -134,7 +138,8 @@ void buttonInput(){
   button2.update();
   button3.update();
   button4.update();
-  joyButton.update();
+  joyButton1.update();
+  joyButton2.update();
 
   // Check each button for "falling" edge.
   // Send a MIDI Note On message when each button presses
@@ -154,8 +159,11 @@ void buttonInput(){
   if (button4.fallingEdge()) {
     usbMIDI.sendNoteOn(buttonNote4, 127, channel);  // 64 = E4
   }
-  if (joyButton.fallingEdge()) {
-    usbMIDI.sendNoteOn(joyButtonNote, 127, channel);  // 64 = E4
+  if (joyButton1.fallingEdge()) {
+    usbMIDI.sendNoteOn(joyButtonNote1, 127, channel);  
+  }
+  if (joyButton2.fallingEdge()) {
+    usbMIDI.sendNoteOn(joyButtonNote2, 127, channel);  
   }
       // Check each button for "rising" edge
   // Send a MIDI Note Off message when each button releases
@@ -176,8 +184,11 @@ void buttonInput(){
   if (button4.risingEdge()) {
     usbMIDI.sendNoteOff(buttonNote4, 0, channel);  // 64 = E4
   }
-    if (joyButton.risingEdge()) {
-    usbMIDI.sendNoteOff(joyButtonNote, 0, channel);  // 64 = E4
+    if (joyButton1.risingEdge()) {
+    usbMIDI.sendNoteOff(joyButtonNote1, 0, channel);  
+  }
+  if (joyButton2.risingEdge()) {
+    usbMIDI.sendNoteOff(joyButtonNote2, 0, channel);  
   }
 }
 
@@ -195,8 +206,8 @@ void faderInput() {
     int f6 = analogRead(faderPin6) / 8;
 
     
-    int j1 = analogRead(joyPin1) / 8;
-    int j2 = analogRead(joyPin2) / 8;
+    int j1 = analogRead(joyPinH1) / 8;
+    int j2 = analogRead(joyPinH2) / 8;
 
     
     int m1 = analogRead(multiPin1) / 8;
