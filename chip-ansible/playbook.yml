@@ -1,53 +1,125 @@
 #!/usr/bin/env ansible-playbook
 ---
-- hosts: chipchestra
+- hosts: nowchips
   gather_facts: yes
   vars:
     update_cache: no
   sudo: yes
   tasks:
-    - name: install ubuntu packages
+    # this should work for updating apt-get, but doesn't
+    #- name: APT install aptitute package with ansible
+    #  apt: name=aptitude state=present
+
+    #- name: ATP update aptitute with ansible 
+    #  apt: update_cache=yes upgrade=safe cache_valid_time=3600
+
+    # Manual way to do the above
+    - name: APT clean apt-get
+      shell: apt-get clean
+
+    - name: APT update apt packages
+      shell: apt-get update
+  
+    # this should work for upgrading apt-get, but doesn't
+    #- name: APT upgrade apt packages
+    #  apt: upgrade=yes
+
+    # we shold really do this also, but it requires typing "yes" and i don't know how
+    #- name: APT update apt packages
+    #  shell: apt-get upgrade
+
+    - name: NETWORK install some networking packages
       apt: pkg={{ item }} state=present update_cache={{ update_cache }}
+      with_items: 
+        - ntp
+        - ntpdate
+        - dnsutils
+        - avahi-daemo
+
+    - name: TIME start network time server
+      shell: /etc/init.d/ntpd restart
+
+    - name: SAMBA install SAMBA packages
+      apt: pkg={{ item }} state=present update_cache={{ update_cache }}
+<<<<<<< HEAD
       with_items:
         # networking
+=======
+      with_items: 
+>>>>>>> origin/master
         - samba
         - samba-common-bin
-        - dnsutils
-        - avahi-daemon
+
+    - name: VNC install VNC packages
+      apt: pkg={{ item }} state=present update_cache={{ update_cache }}
+      with_items: 
         - tightvncserver
-        - ntpdate
-        - rsynch
-        # PureDtata
-        - puredata
+
+    - name: RSYNC install rsync packages
+      apt: pkg={{ item }} state=present update_cache={{ update_cache }}
+      with_items: 
+        - rsync
+
+    # Configure SSH
+<<<<<<< HEAD
+    - name: copy ssh config file
+      template: src=templates/sshd_config dest=/etc/ssh/sshd_config
+=======
+    - name: SSH copy ssh config file
+      template: src=templates/sshd_config dest=/etc/ssh/sshd_config 
+>>>>>>> origin/master
+
+    # Configure Samba
+    - name: SAMBA create samba share directory if it doesn't exist
+      file: path=/samba-share owner=root state=directory mode=1777
+<<<<<<< HEAD
+
+    - name: copy samba config file
+      template: src=templates/smb.conf dest=/etc/samba/smb.conf
+=======
+    
+    - name: SAMBA copy samba config file
+      template: src=templates/smb.conf dest=/etc/samba/smb.conf   
+>>>>>>> origin/master
+
+    # Configure tightvnc
+    - name: VNC copy tightvnc config file
+      template: src=templates/tightvncserver.service dest=/etc/systemd/system/tightvncserver.service
+
+    # Configure PureData
+    - name: PUREDATA install PD and configure it with our special script
+      script: /Users/ali/Documents/Development/chip-party/chip-ansible/scripts/pd_install.sh
+
+    - name: PUREDATA install PD additional packages
+      apt: pkg={{ item }} state=present update_cache={{ update_cache }}
+      with_items: 
         - pd-comport
         - pd-zexy
         - pd-cyclone
         - pd-list-abs
         - pd-osc
 
-    # Configure SSH
-    - name: copy ssh config file
-      template: src=templates/sshd_config dest=/etc/ssh/sshd_config
-
-    # Configure Samba
-    - name: create samba share directory if it doesn't exist
-      file: path=/samba-share owner=root state=directory mode=1777
-
-    - name: copy samba config file
-      template: src=templates/smb.conf dest=/etc/samba/smb.conf
-
-    # Configure tightvnc
-    - name: copy tightvnc config file
-      template: src=templates/tightvncserver.service dest=/etc/systemd/system/tightvncserver.service
-
-    # Configure PureData
-    - name: create pd-patches  directory if it doesn't exist
+    - name: PUREDATA create pd-patches directory if it doesn't exist
       file: path=/samba-share/pd-patches owner=root state=directory mode=1777
 
+<<<<<<< HEAD
+=======
+    - name: PUREDATA synchronize pd-patches folder on remote hosts
+      synchronize: src=/Users/ali/Documents/Development/chip-party/chip-ansible/files/pd-patches dest=/samba-share/
+
+
+>>>>>>> origin/master
   handlers:
     - name: reboot
       command: shutdown -r now "Ansible updates triggered"
       #command: ls -lah ./
       async: 0
       poll: 0
+<<<<<<< HEAD
       ignore_errors:
+=======
+      ignore_errors: 
+
+
+
+>>>>>>> origin/master
