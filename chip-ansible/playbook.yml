@@ -41,7 +41,12 @@
 
     - name: SAMBA install SAMBA packages
       apt: pkg={{ item }} state=present update_cache={{ update_cache }}
+<<<<<<< HEAD
+      with_items:
+        # networking
+=======
       with_items: 
+>>>>>>> origin/master
         - samba
         - samba-common-bin
 
@@ -56,15 +61,26 @@
         - rsync
 
     # Configure SSH
+<<<<<<< HEAD
+    - name: copy ssh config file
+      template: src=templates/sshd_config dest=/etc/ssh/sshd_config
+=======
     - name: SSH copy ssh config file
       template: src=templates/sshd_config dest=/etc/ssh/sshd_config 
+>>>>>>> origin/master
 
     # Configure Samba
     - name: SAMBA create samba share directory if it doesn't exist
       file: path=/samba-share owner=root state=directory mode=1777
+<<<<<<< HEAD
+
+    - name: copy samba config file
+      template: src=templates/smb.conf dest=/etc/samba/smb.conf
+=======
     
     - name: SAMBA copy samba config file
       template: src=templates/smb.conf dest=/etc/samba/smb.conf   
+>>>>>>> origin/master
 
     # Configure tightvnc
     - name: VNC copy tightvnc config file
@@ -86,17 +102,24 @@
     - name: PUREDATA create pd-patches directory if it doesn't exist
       file: path=/samba-share/pd-patches owner=root state=directory mode=1777
 
+<<<<<<< HEAD
+=======
     - name: PUREDATA synchronize pd-patches folder on remote hosts
       synchronize: src=/Users/ali/Documents/Development/chip-party/chip-ansible/files/pd-patches dest=/samba-share/
 
 
+>>>>>>> origin/master
   handlers:
     - name: reboot
       command: shutdown -r now "Ansible updates triggered"
-      #command: ls -lah ./ 
+      #command: ls -lah ./
       async: 0
       poll: 0
+<<<<<<< HEAD
+      ignore_errors:
+=======
       ignore_errors: 
 
 
 
+>>>>>>> origin/master

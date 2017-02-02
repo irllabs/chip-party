@@ -1,4 +1,7 @@
 [chipchestra]
+<<<<<<< HEAD
+chip02 ansible_ssh_host=192.168.1.102 ansible_ssh_user=root ansible_ssh_pass=chip host_key_checking=false
+=======
 chip01 ansible_ssh_host=192.168.1.101 ansible_ssh_user=root ansible_ssh_pass=chip host_key_checking=false
 chip02 ansible_ssh_host=192.168.1.102 ansible_ssh_user=root ansible_ssh_pass=chip host_key_checking=false
 chip03 ansible_ssh_host=192.168.1.103 ansible_ssh_user=root ansible_ssh_pass=chip host_key_checking=false
@@ -9,3 +12,4 @@ chip06 ansible_ssh_host=192.168.1.106 ansible_ssh_user=root ansible_ssh_pass=chi
 [nowchips]
 chip05 ansible_ssh_host=192.168.1.105 ansible_ssh_user=root ansible_ssh_pass=chip host_key_checking=false
 chip06 ansible_ssh_host=192.168.1.106 ansible_ssh_user=root ansible_ssh_pass=chip host_key_checking=false
+>>>>>>> origin/master
