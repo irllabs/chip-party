@@ -91,9 +91,8 @@ elapsedMillis msec = 0;
 // it makes detecting changes very simple.
 
 Bounce button1 = Bounce(buttonPin1, 5);  // 5 = 5 ms debounce time
-Bounce button2 = Bounce(buttonPin2, 5);  // which is appropriate for good
-Bounce button3 = Bounce(buttonPin3, 5);  // quality mechanical pushbuttons
-Bounce button4 = Bounce(buttonPin4, 5);
+Bounce button2 = Bounce(buttonPin2, 5);  // which is appropriate for good quality mechanical pushbuttons
+
 Bounce joyButton1 = Bounce(joyButtonPin1, 5);
 Bounce joyButton2 = Bounce(joyButtonPin2, 5);
 
@@ -119,8 +118,7 @@ void setup() {
   // has built-in pullup resistors!
   pinMode(buttonPin1, INPUT_PULLUP);
   pinMode(buttonPin2, INPUT_PULLUP);
-  pinMode(buttonPin3, INPUT_PULLUP);
-  pinMode(buttonPin4, INPUT_PULLUP);
+ 
   pinMode(joyButtonPin1, INPUT_PULLUP);
   pinMode(joyButtonPin2, INPUT_PULLUP);
   
@@ -136,8 +134,7 @@ void buttonInput(){
   // faster than the buttons could be pressed and released.
   button1.update();
   button2.update();
-  button3.update();
-  button4.update();
+
   joyButton1.update();
   joyButton2.update();
 
@@ -153,11 +150,7 @@ void buttonInput(){
   if (button2.fallingEdge()) {
     usbMIDI.sendNoteOn(buttonNote2, 127, channel);  // 62 = D4
   }
-  if (button3.fallingEdge()) {
-    usbMIDI.sendNoteOn(buttonNote3, 127, channel);  // 63 = D#4
-  }
-  if (button4.fallingEdge()) {
-    usbMIDI.sendNoteOn(buttonNote4, 127, channel);  // 64 = E4
+
   }
   if (joyButton1.fallingEdge()) {
     usbMIDI.sendNoteOn(joyButtonNote1, 127, channel);  
