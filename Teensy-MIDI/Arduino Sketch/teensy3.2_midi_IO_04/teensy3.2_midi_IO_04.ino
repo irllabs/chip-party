@@ -1,6 +1,5 @@
 #include <Bounce2.h>
 
-
 // the MIDI channel number to send messages
 const int channel = 1;
 
@@ -8,8 +7,8 @@ const int ledPins[] = {5, 6, 20, 21}; //led pin numbers
 const int ledNotes[] = {60, 61, 62, 63}; //note numbers for leds
 const int leds = sizeof(ledPins)/sizeof(leds); //used for loops
 
-const int faderPins[] = {A0, A9, A20, A10, A11, A12}; //fader pins
-const int faderCtls[] = {14, 15, 16, 17, 18, 19}; //fader MIDI CC #s
+const int faderPins[] = {28, 19, 22, A10, 21, 23, A12, A11, A13, A6}; //fader pins
+const int faderCtls[] = {10, 11, 12, 13, 14, 15, 16, 17, 18, 19}; //fader MIDI CC #s
 const int faders = sizeof(faderPins)/sizeof(faders); //used for loops
 int faderPrevs[faders]; //used to store previous values
 
@@ -23,7 +22,7 @@ const int joyButtonNotes [] = {65, 66}; //note numbers
 const int joyButtons = sizeof(joyButtonPins)/sizeof(joyButtons); // for loops
 Bounce * joyButtDebouncer = new Bounce[joyButtons]; // Create Bounce objects for each button.
 
-const int buttonPins[] = {13, 14}; //pins
+const int buttonPins[] = {0, 1}; //pins
 const int buttonNotes[] = {61, 62}; //note nums
 const int buttons = sizeof(buttonPins)/sizeof(buttons); //for loops
 Bounce * buttDebouncer = new Bounce[buttons]; // Create Bounce objects for each button.
@@ -90,7 +89,7 @@ void faderInput(){
     msec = 0;
     for (int b = 0; b < faders; b++) {
       int f = analogRead(faderPins[b]) / 8;
-      if (f != faderPrevs[b]) {
+      if ( (f != faderPrevs[b]) ) {
         usbMIDI.sendControlChange(faderCtls[b], f, channel);
         faderPrevs[b] = f;
       }
